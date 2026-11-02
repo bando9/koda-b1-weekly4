@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Ewallet.Console/">
+    <Project Path="src/Ewallet.Console/EwalletApp.csproj" />
+  </Folder>
+</Solution>
