@@ -7,12 +7,15 @@ public sealed class Transaction
     public DateTime CreatedAt {get;set;} = DateTime.UtcNow;
     public DateTime UpdatedAt {get;set;} = DateTime.UtcNow;
 
-    public Transaction(string id, string referenceId, DateTime createdAt, DateTime updatedAt)
+    public Transaction()
     {
-        Id = id;
-        ReferenceId=referenceId;
-        CreatedAt=createdAt;
-        UpdatedAt=updatedAt;
+        Id = Guid.NewGuid().ToString();
+        ReferenceId= "REF-" +  DateTime.UtcNow.Ticks;
+    }
+
+    public string GetInformation()
+    {
+        return $"No Referensi: {ReferenceId}";
     }
 
 }
