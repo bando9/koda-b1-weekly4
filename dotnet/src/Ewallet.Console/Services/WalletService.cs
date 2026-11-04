@@ -78,19 +78,31 @@ public class WalletService:IWalletService
         User? user = GetUserByUserId(userId);
         Wallet? wallet = GetWalletByUserId(userId);
 
-        List<Mutation> mutations = _context.Mutations;
+        List<Mutation> mutationUser = _context.Mutations.Where(m=> m.WalletId == wallet.Id).ToList();
 
-        List<Mutation> mutationUser = mutations.Where(m=> m.WalletId == wallet.Id).ToList();
+        if(mutationUser.Count() <= 0)
+        {
+            System.Console.WriteLine("Belum ada transaksi");
+            return;
+        }
 
+        var i = 0;
         foreach(Mutation mutation in mutationUser)
         {
-            System.Console.WriteLine($"{mutation.Amount}");
+            i++;
+            System.Console.WriteLine($"{i}. {mutation.TransactionType} = {mutation.Amount.ToString("C0")}");
         }
+
+
+        System.Console.WriteLine($"\nTotal Pemasukan: {TotalTransactionIncomeUser(wallet.Id).ToString("C0")}");
     }
 
-        public decimal TotalTransactionIncome()
+        public decimal TotalTransactionIncomeUser(string walletId)
     {
-        List<Mutation> mutations = _context.Mutations.Where(m => m.TransactionType == TransactionTypeEnum.Income).ToList();       
-        return 1;
+        List<Mutation> mutations = _context.Mutations.Where(m => m.WalletId == walletId).ToList();
+        List<Mutation> mutationsIncome = _context.Mutations.Where(m => m.TransactionType == TransactionTypeEnum.Income).ToList();
+        var totalIncome = mutationsIncome.Sum(m => m.Amount);
+
+        return totalIncome;
     }
 }

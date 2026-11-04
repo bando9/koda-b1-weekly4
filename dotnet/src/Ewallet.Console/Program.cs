@@ -63,8 +63,7 @@ while (isRunningApp)
             System.Console.WriteLine(menu[2]);
             break;
         case "4":
-            // TODO: history
-            System.Console.WriteLine(menu[3]);
+            walletService.GetMutationHistory(user.Id);
             break;
         case "5":
             System.Console.WriteLine(menu[4]);
