@@ -34,7 +34,7 @@ public class WalletService:IWalletService
 
     public void GetInformation(string userId)
     {
-        System.Console.WriteLine("\n\n----- LIHAT SALDO -----");
+        System.Console.WriteLine("\n\n-------- LIHAT SALDO --------");
         var formatToRupiah = CultureInfo.GetCultureInfo("id-ID");
 
         User? user = GetUserByUserId(userId);
@@ -53,56 +53,10 @@ public class WalletService:IWalletService
         {
             throw new ArgumentException("user not found");
         }
-        // TODO: userId > users.count()
-        // TODO: userId < 0
 
         return user;
     }
 
-    public void TopUpExecute(string userId, decimal amount, string? description)
-    {
 
-        Wallet? wallet = GetWalletByUserId(userId) ?? throw new ArgumentException($"Sorry, wallet not found by user id: {userId}");
-
-        if(wallet != null)
-        {
-            TransactionService transactionService = new TransactionService(_context);
-            transactionService.TopUp(wallet, amount, description);
-        }
-    }
-
-    public void GetMutationHistory(string userId)
-    {
-
-        System.Console.WriteLine("\n\n----- RIWAYAT -----");
-        User? user = GetUserByUserId(userId);
-        Wallet? wallet = GetWalletByUserId(userId);
-
-        List<Mutation> mutationUser = _context.Mutations.Where(m=> m.WalletId == wallet.Id).ToList();
-
-        if(mutationUser.Count() <= 0)
-        {
-            System.Console.WriteLine("Belum ada transaksi");
-            return;
-        }
-
-        var i = 0;
-        foreach(Mutation mutation in mutationUser)
-        {
-            i++;
-            System.Console.WriteLine($"{i}. {mutation.TransactionType} = {mutation.Amount.ToString("C0")}");
-        }
-
-
-        System.Console.WriteLine($"\nTotal Pemasukan: {TotalTransactionIncomeUser(wallet.Id).ToString("C0")}");
-    }
-
-        public decimal TotalTransactionIncomeUser(string walletId)
-    {
-        List<Mutation> mutations = _context.Mutations.Where(m => m.WalletId == walletId).ToList();
-        List<Mutation> mutationsIncome = _context.Mutations.Where(m => m.TransactionType == TransactionTypeEnum.Income).ToList();
-        var totalIncome = mutationsIncome.Sum(m => m.Amount);
-
-        return totalIncome;
-    }
+    
 }

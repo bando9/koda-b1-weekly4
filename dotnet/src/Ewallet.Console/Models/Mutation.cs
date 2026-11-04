@@ -15,6 +15,8 @@ public class Mutation
     public TransactionTypeEnum TransactionType {get; private set;}
     public string WalletId {get; private set;}
     public string TransactionId {get; private set;}
+    public DateTime CreatedAt {get;set;} = DateTime.Now;
+    public DateTime UpdatedAt {get;set;} = DateTime.Now;
 
     public Mutation(string? description, decimal amount, TransactionTypeEnum transactionType, string walletId, string transactionId)
     {

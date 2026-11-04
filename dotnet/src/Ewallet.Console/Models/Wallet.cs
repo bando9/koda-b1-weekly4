@@ -9,8 +9,8 @@ public class Wallet
     public string PINHash {get;private set;}
     public decimal Balance {get;private set;}
     public string UserId {get; private set;}
-    public DateTime CreatedAt {get;set;} = DateTime.UtcNow;
-    public DateTime UpdatedAt {get;set;} = DateTime.UtcNow;
+    public DateTime CreatedAt {get;set;} = DateTime.Now;
+    public DateTime UpdatedAt {get;set;} = DateTime.Now;
     
 
     public Wallet(string id, string accountNumber, string pinHash, string userId, decimal balance = 0)
@@ -47,7 +47,7 @@ public class Wallet
         {
             throw new ArgumentException("maaf, saldo akunmu kurang");
         }
-        UpdatedAt = DateTime.UtcNow;
+        UpdatedAt = DateTime.Now;
         return Balance-=amount;
     }
 

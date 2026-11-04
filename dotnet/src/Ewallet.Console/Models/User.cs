@@ -15,8 +15,8 @@ public class User
     public string Photo { get; private set; } 
     public string FullName { get; private set; }
     public string Phone { get; private set; }
-    public DateTime CreatedAt {get;set;} = DateTime.UtcNow;
-    public DateTime UpdatedAt {get;set;} = DateTime.UtcNow;
+    public DateTime CreatedAt {get;set;} = DateTime.Now;
+    public DateTime UpdatedAt {get;set;} = DateTime.Now;
 
     public User(string id,string username, string passwordHash, string email, string photo, string fullName, string phone)
     {

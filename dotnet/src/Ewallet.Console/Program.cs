@@ -10,6 +10,7 @@ System.Console.WriteLine("================================\n");
 InMemoryDbContext context = new InMemoryDbContext();
 
 WalletService walletService = new WalletService(context);
+TransactionService transactionService = new(context);
 
 List<string> menu = new List<string>
 {
@@ -31,6 +32,12 @@ while (isRunningApp)
 {
 
     User? user = walletService.SelectUser(selectedUserId);
+
+    if(user is null)
+    {
+        System.Console.WriteLine("user tidak ditemukan\nExit...");
+        return;
+    }
 
     System.Console.WriteLine($"\n======== WALLET {user?.FullName} ========\n");
     
@@ -56,17 +63,31 @@ while (isRunningApp)
             System.Console.WriteLine("Deskripsi tujuan top up: ");
             string? description = Console.ReadLine();
 
-            walletService.TopUpExecute(user.Id, topUpAmount,description);
+            transactionService.TopUp(user.Id, topUpAmount, description);
             break;
         case "3":
-            // TODO: transfer
-            System.Console.WriteLine(menu[2]);
+            System.Console.WriteLine();
+            List<User> usersToTransfer = context.Users.Where(u => u.Id != user.Id).ToList();
+
+            foreach(User u in usersToTransfer)
+            {
+                System.Console.WriteLine($"{u.Id}. {u.FullName}");
+            }
+
+            System.Console.WriteLine("Pilih siapa yg mau kmu kirim (id): ");
+            string? receiverId = Console.ReadLine();
+           
+            System.Console.WriteLine("Mau kirim berapa: ");
+            decimal transferAmount = Convert.ToDecimal(Console.ReadLine());
+
+            transactionService.Transfer(user.Id, receiverId, transferAmount);
+            
             break;
         case "4":
-            walletService.GetMutationHistory(user.Id);
+            transactionService.GetMutationHistory(user.Id);
             break;
         case "5":
-            System.Console.WriteLine(menu[4]);
+            System.Console.WriteLine("Logout");
             isRunningApp=false;
             break;
         default:
