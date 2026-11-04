@@ -16,7 +16,7 @@ public class Mutation
     public string WalletId {get; private set;}
     public string TransactionId {get; private set;}
 
-    public Mutation(string description, decimal amount, TransactionTypeEnum transactionType, string walletId, string transactionId)
+    public Mutation(string? description, decimal amount, TransactionTypeEnum transactionType, string walletId, string transactionId)
     {
         Id = Guid.NewGuid().ToString();
         Description=description;
@@ -25,4 +25,6 @@ public class Mutation
         WalletId = walletId;
         TransactionId=transactionId;
     }
+
+
 }

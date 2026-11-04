@@ -1,3 +1,5 @@
+using System;
+
 using Ewallet.Console.Data;
 using Ewallet.Console.Interfaces;
 using Ewallet.Console.Models;
@@ -18,8 +20,14 @@ public class TransactionService : ITransactionService
         return _context.Mutations.Where(w => w.Id == walletId).ToList();
     }
 
-    public void TopUp(Wallet wallet, decimal amount)
+    public void TopUp(Wallet wallet, decimal amount, string description)
     {
+        Transaction newTransaction = new Transaction();
+        _context.Transactions.Add(newTransaction);
+
+        Mutation newMutation = new Mutation(description, amount, TransactionTypeEnum.Income,wallet.Id,newTransaction.Id);
+        _context.Mutations.Add(newMutation);
+
         System.Console.WriteLine($"\nWallet id: {wallet.Id}\nSaldo Awal: {wallet.Balance.ToString("C0")}\n");
 
         wallet.Debit(amount);

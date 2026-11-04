@@ -59,22 +59,38 @@ public class WalletService:IWalletService
         return user;
     }
 
-    public void TopUpExecute(string userId, decimal amount)
+    public void TopUpExecute(string userId, decimal amount, string? description)
     {
 
         Wallet? wallet = GetWalletByUserId(userId) ?? throw new ArgumentException($"Sorry, wallet not found by user id: {userId}");
 
         if(wallet != null)
         {
-            Transaction newTransaction = new Transaction();
-            _context.Transactions.Add(newTransaction);
-
-            Mutation newMutation = new Mutation("desc", amount, TransactionTypeEnum.Income,wallet.Id,newTransaction.Id);
-            _context.Mutations.Add(newMutation);
-
             TransactionService transactionService = new TransactionService(_context);
-            transactionService.TopUp(wallet, amount);
-
+            transactionService.TopUp(wallet, amount, description);
         }
+    }
+
+    public void GetMutationHistory(string userId)
+    {
+
+        System.Console.WriteLine("\n\n----- RIWAYAT -----");
+        User? user = GetUserByUserId(userId);
+        Wallet? wallet = GetWalletByUserId(userId);
+
+        List<Mutation> mutations = _context.Mutations;
+
+        List<Mutation> mutationUser = mutations.Where(m=> m.WalletId == wallet.Id).ToList();
+
+        foreach(Mutation mutation in mutationUser)
+        {
+            System.Console.WriteLine($"{mutation.Amount}");
+        }
+    }
+
+        public decimal TotalTransactionIncome()
+    {
+        List<Mutation> mutations = _context.Mutations.Where(m => m.TransactionType == TransactionTypeEnum.Income).ToList();       
+        return 1;
     }
 }

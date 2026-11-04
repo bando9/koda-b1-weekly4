@@ -53,7 +53,10 @@ while (isRunningApp)
             System.Console.WriteLine("Mau Top up berapa: ");
             decimal topUpAmount = Convert.ToDecimal(Console.ReadLine());
 
-            walletService.TopUpExecute(user.Id, topUpAmount);
+            System.Console.WriteLine("Deskripsi tujuan top up: ");
+            string? description = Console.ReadLine();
+
+            walletService.TopUpExecute(user.Id, topUpAmount,description);
             break;
         case "3":
             // TODO: transfer
