@@ -10,12 +10,14 @@ public class TransactionService : ITransactionService
 {
     private readonly InMemoryDbContext _context;
     private readonly WalletService _walletService;
+    private readonly UserService _userService;
     
 
     public TransactionService(InMemoryDbContext context)
     {
         _context=context;
         _walletService= new WalletService(_context);
+        _userService= new(_context);
     }
 
     public List<Mutation> GetMutationHistory(string walletId, TransactionTypeEnum? type = null)
@@ -25,11 +27,12 @@ public class TransactionService : ITransactionService
 
     public void TopUp(string userId, decimal amount, string description)
     {
+
         Wallet? wallet = _walletService.GetWalletByUserId(userId);
-        System.Console.WriteLine(wallet.UserId);
 
         if(wallet != null)
         {
+            System.Console.WriteLine("\n\n-------- TOP UP --------");
             Transaction newTransaction = new Transaction();
             _context.Transactions.Add(newTransaction);
 
@@ -47,12 +50,22 @@ public class TransactionService : ITransactionService
         }
     }
 
-    public void Transfer(string senderId, string receiverId, decimal transferAmount)
+    public void Transfer(string senderId, string receiverId, decimal transferAmount, string? description)
     {
-        Wallet? senderWallet = _walletService.GetWalletByUserId(senderId);
-        Wallet? receiverWallet = _walletService.GetWalletByUserId(receiverId);
-        User? receiver = _walletService.GetUserByUserId(receiverId);
-        User? sender = _walletService.GetUserByUserId(senderId);
+        Wallet? senderWallet = _walletService.GetWalletByUserId(senderId) ?? throw new ArgumentException("Wallet not registered");
+        Wallet? receiverWallet = _walletService.GetWalletByUserId(receiverId) ?? throw new ArgumentException("Wallet not registered");
+        User? receiver = _userService.GetUserByUserId(receiverId) ?? throw new ArgumentException("Wallet not registered"); 
+        User? sender = _userService.GetUserByUserId(senderId)?? throw new ArgumentException("Wallet not registered");
+
+        if(senderWallet == receiverWallet)
+        {
+            throw new ArgumentException("Kmu gabisa ngirim diri sendiri.");
+        }
+
+        if(senderWallet.Balance < transferAmount)
+        {
+            throw new ArgumentException("Maaf saldo dompetmu kurang.\nTransaksi dibatalkan.");
+        }
 
         System.Console.WriteLine("\n\n-------- TRANSFER --------");
         System.Console.WriteLine($"Nomor Wallet Tujuan: {receiverWallet.Id}\nPenerima: {receiver?.FullName}\nNominal Transfer: {transferAmount.ToString("C0")}");
@@ -60,9 +73,9 @@ public class TransactionService : ITransactionService
         Transaction newTransaction = new();
         _context.Transactions.Add(newTransaction);
 
-        Mutation senderMutation = new("deskripsi", transferAmount,TransactionTypeEnum.Expense,senderWallet.Id,newTransaction.Id); 
+        Mutation senderMutation = new(description, transferAmount,TransactionTypeEnum.Expense,senderWallet.Id,newTransaction.Id); 
         
-        Mutation receiverMutation = new("deskripsi", transferAmount,TransactionTypeEnum.Income,receiverWallet.Id,newTransaction.Id); 
+        Mutation receiverMutation = new(description, transferAmount,TransactionTypeEnum.Income,receiverWallet.Id,newTransaction.Id); 
         
         _context.Mutations.Add(senderMutation);
         _context.Mutations.Add(receiverMutation);
@@ -92,7 +105,7 @@ public class TransactionService : ITransactionService
     public decimal TotalTransactionIncome(string walletId)
     {
         List<Mutation> mutationsIncome = GetMutationByWalletId(walletId).Where(m => m.TransactionType == TransactionTypeEnum.Income).ToList();
-        var totalIncome = mutationsIncome.Sum(m => m.Amount);
+        decimal totalIncome = mutationsIncome.Sum(m => m.Amount);
 
         return totalIncome;
     }
@@ -101,7 +114,7 @@ public class TransactionService : ITransactionService
     {
         List<Mutation> mutationsExpense = GetMutationByWalletId(walletId).Where(m => m.TransactionType == TransactionTypeEnum.Expense).ToList();
 
-        var totalExpense = mutationsExpense.Sum(m => m.Amount);
+        decimal totalExpense = mutationsExpense.Sum(m => m.Amount);
 
         return totalExpense;
     }

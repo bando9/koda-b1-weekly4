@@ -11,6 +11,7 @@ public class User
     [Required]
     [StringLength(50)]
     public string PasswordHash { get; private set; } 
+    [EmailAddress]
     public string Email { get; private set; } 
     public string Photo { get; private set; } 
     public string FullName { get; private set; }
