@@ -111,6 +111,7 @@ while (isRunningApp)
             
             break;
         case "4":
+
             if(user != null)
             {
                 transactionService.GetMutationHistory(user.Id);

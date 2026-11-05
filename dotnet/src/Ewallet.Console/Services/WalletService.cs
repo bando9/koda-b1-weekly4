@@ -24,9 +24,9 @@ public class WalletService:IWalletService
 
     public decimal CheckBalance(string userId)
     {
-        var wallet = GetWalletByUserId(userId);
-
-        return wallet is null ?  wallet.Balance : 0m ;
+        var wallet = GetWalletByUserId(userId) ?? throw new ArgumentException("wallet blm didaftarin");
+        
+        return wallet.Balance; 
     }
 
     public void GetInformation(string userId)

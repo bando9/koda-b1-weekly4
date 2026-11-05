@@ -99,7 +99,7 @@ public class TransactionService : ITransactionService
         senderWallet.Credit(transferAmount);
         receiverWallet.Debit(transferAmount);
 
-        System.Console.WriteLine($"Pengirim: {receiver.FullName}\nPenerima: {sender.FullName}\nNominal: {transferAmount.ToString("C0")}\nSisa Saldo: {senderWallet.Balance.ToString("C0")}");   
+        System.Console.WriteLine($"Pengirim: {sender?.FullName}\nPenerima: {receiver?.FullName}\nNominal: {transferAmount.ToString("C0")}\nSisa Saldo: {senderWallet.Balance.ToString("C0")}");   
     }
 
     public decimal TotalTransactionIncome(string walletId)
@@ -124,25 +124,37 @@ public class TransactionService : ITransactionService
         return _context.Mutations.Where(m => m.WalletId == walletId).ToList();
     }
 
-        public void GetMutationHistory(string userId)
+    public void GetMutationHistory(string userId)
     {
         TransactionService transactionService = new(_context);
 
         var budayaIndo = new CultureInfo("id-ID");
 
-        System.Console.WriteLine("\n\n-------- RIWAYAT --------");
         Wallet? wallet = _walletService.GetWalletByUserId(userId);
 
-        List<Mutation> mutationUser = GetMutationByWalletId(wallet.Id).OrderByDescending(m => m.CreatedAt).ToList();
+        if(wallet != null)
+        {
+            System.Console.WriteLine("\n(1) Income\n(2) Expense\n(3) Semua\nFilter mutasi (id):");
+            string? filterMutations = System.Console.ReadLine();
+            
+            List<Mutation> mutations = filterMutations switch
+            {
+                "1"=> GetMutationIncome(wallet.Id),
+                "2"=> GetMutationExpense(wallet.Id),
+                _  => GetMutationAll(wallet.Id),
 
-        if(mutationUser.Count <= 0)
+            };
+
+        System.Console.WriteLine("\n\n-------- RIWAYAT --------");
+
+        if(mutations.Count <= 0)
         {
             System.Console.WriteLine("Belum ada transaksi");
             return;
         }
 
         var i = 0;
-        foreach(Mutation mutation in mutationUser)
+        foreach(Mutation mutation in mutations)
         {
             i++;
             System.Console.WriteLine($"{i}. {mutation.Description} ({mutation.TransactionType}) = {mutation.Amount.ToString("C0")} ({mutation.CreatedAt.ToString("dd MMMM yyyy, HH:mm:tt", budayaIndo)})");
@@ -151,6 +163,28 @@ public class TransactionService : ITransactionService
 
         System.Console.WriteLine($"\nTotal Pemasukan: {transactionService.TotalTransactionIncome(wallet.Id).ToString("C0")}");
         System.Console.WriteLine($"Total Pengeluaran: {transactionService.TotalTransactionExpense(wallet.Id).ToString("C0")}");
+        }
+    }
+
+    public List<Mutation> GetMutationIncome(string walletId)
+    {   
+        List<Mutation> mutationsIncome = GetMutationByWalletId(walletId).Where(m => m.TransactionType == TransactionTypeEnum.Income).OrderByDescending(m => m.CreatedAt).ToList();
+
+        return mutationsIncome;
     }
     
+    public List<Mutation> GetMutationExpense(string walletId)
+    {   
+        List<Mutation> mutationsExpense = GetMutationByWalletId(walletId).Where(m => m.TransactionType == TransactionTypeEnum.Expense).OrderByDescending(m => m.CreatedAt).ToList();
+
+        return mutationsExpense;
+    }
+
+    public List<Mutation> GetMutationAll(string walletId)
+    {
+        List<Mutation> mutations = GetMutationByWalletId(walletId).OrderByDescending(m => m.CreatedAt).ToList();
+
+        return mutations;
+    }
+
 }
