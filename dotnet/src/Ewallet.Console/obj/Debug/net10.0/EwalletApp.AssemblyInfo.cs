@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EwalletApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+41cd1c3e6aeb166d7a863c7e950f4ae3448092b1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8e0ee69759a220c39cfab2dfde642d5fd76e2ea3")]
 [assembly: System.Reflection.AssemblyProductAttribute("EwalletApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EwalletApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
