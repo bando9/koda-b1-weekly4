@@ -47,6 +47,8 @@ public class App
                     continue;
                 }
 
+                List<User> usersToTransfer = users.stream().filter(u-> !userLogin.equals(u.getId())).toList();
+
                 
                 boolean isLogIn = true;
                 while(isLogIn){
@@ -79,7 +81,15 @@ public class App
                             transactionServiceImpl.TopUp(userLogin, input);
                         }
                         case 3 -> {
+                            System.out.println();
 
+                            for(User u : usersToTransfer){
+                                System.out.println(u.getId()+". "+u.getFullName());
+                            }
+                            System.out.println("Mau kirim ke siapa(id): ");
+                            String receiverId = input.nextLine(); 
+                            transactionServiceImpl.Transfer(userLogin, receiverId, input);
+                            
                             System.out.println("transfer");
                          
                         }

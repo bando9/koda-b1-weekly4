@@ -7,7 +7,7 @@ import com.ewallet.model.Mutation;
 import com.ewallet.model.TransactionTypeEnum;
 
 public interface TransactionService{
-    void Transfer(String senderId, String receiverId, long transferAmount, String description);
+    void Transfer(String senderId, String receiverId, Scanner input);
     void TopUp(String userId, Scanner input);
     List<Mutation> GetMutationHistory(String walletId, TransactionTypeEnum typeEnum);
 

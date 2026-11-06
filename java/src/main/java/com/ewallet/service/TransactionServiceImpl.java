@@ -23,9 +23,57 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public void Transfer(String senderId, String receiverId, long transferAmount, String description) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'Transfer'");
+    public void Transfer(String senderId, String receiverId, Scanner input) {
+        Helper helper = new Helper();
+
+        // TODO: wallet & user from sender & receiver
+        User sender = _userServiceImpl.getUserByUserId(senderId);
+        User receiver = _userServiceImpl.getUserByUserId(receiverId);
+        Wallet senderWallet = _walletServiceImpl.getWalletByUserId(senderId); 
+        Wallet receiverWallet = _walletServiceImpl.getWalletByUserId(receiverId); 
+
+        System.out.println("Mau Transfer berapa: ");
+        long transferAmount = input.nextLong();
+
+        System.out.println("Tujuan transfer: ");
+        String description = input.nextLine();
+        input.nextLine();
+        
+        System.out.println("Konfirmasi (Y/N): ");
+        String confirmation = input.nextLine();
+
+        if(!("Y".equalsIgnoreCase(confirmation)))
+        {
+            System.out.println("Transaksi dibatalkan oleh pengguna.");
+            return;
+        }
+
+        System.out.println("\n\n-------- TRANSFER --------");
+        System.out.println("Nomor Wallet Tujuan: "+ receiverWallet.id+"\nPenerima: "+ receiver.getFullName()+"\nNominal Transfer: "+helper.FormattedToRupiah(transferAmount));
+        
+        Transaction newTransaction = new Transaction();
+        _context.getTransactions().add(newTransaction);
+
+        Mutation senderMutation = new Mutation(transferAmount,description,TransactionTypeEnum.Expense,senderWallet.id,newTransaction.getId()); 
+        Mutation receiverMutation = new Mutation(transferAmount,description,TransactionTypeEnum.Income,receiverWallet.id,newTransaction.getId()); 
+                
+        _context.getMutations().add(senderMutation);
+        _context.getMutations().add(receiverMutation);
+
+
+        System.out.println("Sedang melakukan transaksi...");
+        
+        try{
+            Thread.sleep(2000);
+
+            System.out.println("Transaksi Berhasil!\n");
+            
+            
+            senderWallet.Credit(transferAmount);
+            receiverWallet.Debit(transferAmount);
+            
+            System.out.println("Pengirim: "+ sender.getFullName()+"\nPenerima:"+receiver.getFullName() + "\nNominal: "+helper.FormattedToRupiah(transferAmount)+"\nSisa Saldo:"+helper.FormattedToRupiah(senderWallet.balance));
+        }catch(Exception e){}
     }
 
     @Override
@@ -70,5 +118,7 @@ public class TransactionServiceImpl implements TransactionService {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'GetMutationHistory'");
     }
+
+
     
 }
