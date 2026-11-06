@@ -1,13 +1,13 @@
 package com.ewallet;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 
 import com.ewallet.data.DbContext;
 import  com.ewallet.model.*;
+import com.ewallet.service.TransactionServiceImpl;
 import com.ewallet.service.UserServiceImpl;
+import com.ewallet.service.WalletServiceImpl;
 
 public class App 
 {
@@ -18,6 +18,9 @@ public class App
         try (Scanner input = new Scanner(System.in)) {
 
             UserServiceImpl userService = new UserServiceImpl(_context);
+            WalletServiceImpl walletService = new WalletServiceImpl(_context);
+            TransactionServiceImpl transactionServiceImpl = new TransactionServiceImpl(_context);
+            
             boolean isRunningApp = true;
             while(isRunningApp){               
                 System.out.println("================= KODA EWALLET ================="); 
@@ -27,13 +30,32 @@ public class App
                     i++;
                     System.out.println(i+". "+user.getFullName());
                 }
+                int maxUser = _context.getUsers().size();
+                System.out.println(maxUser+1+". Exit");
 
                 System.out.println("Pilih pengguna: ");
                 String userLogin = input.nextLine();
+
+                if(userLogin.equals(String.valueOf(maxUser+1))){
+                    System.out.println("Keluar...");
+                    isRunningApp=false;
+                    return;
+                }
+
+                if(!userLogin.matches("[1-"+maxUser+"]")){
+                    System.out.println("Pilihan tidak valid. coba lagi...");
+                    continue;
+                }
+
                 
                 boolean isLogIn = true;
                 while(isLogIn){
                     User user = userService.getUserByUserId(userLogin);
+                    
+                    if(user == null){
+                        System.out.println("user tidak ditemukan");
+                        return;
+                    }
 
                     System.out.println("======== WALLET "+ user.getFullName().toUpperCase() +" =========");
 
@@ -47,31 +69,29 @@ public class App
 
                     System.out.println("Silahkan Pilih menu: ");
                     int chooseMenu = input.nextInt();
+                    input.nextLine();
 
                     switch (chooseMenu) {
                         case 1 -> {
-
-                            System.out.println("tes");
-                         
+                            walletService.getBalanceByUserId(userLogin);
                         }
                         case 2 -> {
-
-                            System.out.println("tes");
-                         
+                            transactionServiceImpl.TopUp(userLogin, input);
                         }
                         case 3 -> {
 
-                            System.out.println("tes");
+                            System.out.println("transfer");
                          
                         }
                         case 4 -> {
 
-                            System.out.println("tes");
+                            System.out.println("mutasi");
                          
                         }
                         case 5 -> {
 
-                            System.out.println("tes");
+                            System.out.println("Logout");
+                            isLogIn=false;
                          
                         }
 

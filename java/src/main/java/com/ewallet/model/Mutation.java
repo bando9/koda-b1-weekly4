@@ -5,11 +5,11 @@ import java.util.UUID;
 
 public class Mutation {
     private UUID id = UUID.randomUUID();
-    private double amount;
+    private long amount;
     private String description;
     private TransactionTypeEnum transactionType;
     private String walletId;
-    private String transactionId;
+    private UUID transactionId;
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt = LocalDateTime.now();
 
@@ -17,11 +17,11 @@ public class Mutation {
         return id;
     }
 
-    public double getAmount() {
+    public long getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(long amount) {
         this.amount = amount;
     }
 
@@ -49,12 +49,8 @@ public class Mutation {
         this.walletId = walletId;
     }
 
-    public String getTransactionId() {
+    public UUID getTransactionId() {
         return transactionId;
-    }
-
-    public void setTransactionId(String transactionId) {
-        this.transactionId = transactionId;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -66,7 +62,7 @@ public class Mutation {
         return updatedAt;
     }
     
-    public Mutation(double amount,String description, TransactionTypeEnum transactionType, String walletId, String transactionId){
+    public Mutation(long amount,String description, TransactionTypeEnum transactionType, String walletId, UUID transactionId){
         this.amount = amount;
         this.description=description;
         this.transactionType = transactionType;

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\code\\koda-projects\\1-task\\koda-b1-weekly4\\dotnet\\src\\Ewallet.Console\\EwalletApp.csproj": {}
+    "E:\\code\\koda-projects\\1-task\\fase-1\\koda-b1-weekly4\\dotnet\\src\\Ewallet.Console\\EwalletApp.csproj": {}
   },
   "projects": {
-    "E:\\code\\koda-projects\\1-task\\koda-b1-weekly4\\dotnet\\src\\Ewallet.Console\\EwalletApp.csproj": {
+    "E:\\code\\koda-projects\\1-task\\fase-1\\koda-b1-weekly4\\dotnet\\src\\Ewallet.Console\\EwalletApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\code\\koda-projects\\1-task\\koda-b1-weekly4\\dotnet\\src\\Ewallet.Console\\EwalletApp.csproj",
+        "projectUniqueName": "E:\\code\\koda-projects\\1-task\\fase-1\\koda-b1-weekly4\\dotnet\\src\\Ewallet.Console\\EwalletApp.csproj",
         "projectName": "EwalletApp",
-        "projectPath": "E:\\code\\koda-projects\\1-task\\koda-b1-weekly4\\dotnet\\src\\Ewallet.Console\\EwalletApp.csproj",
+        "projectPath": "E:\\code\\koda-projects\\1-task\\fase-1\\koda-b1-weekly4\\dotnet\\src\\Ewallet.Console\\EwalletApp.csproj",
         "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
-        "outputPath": "E:\\code\\koda-projects\\1-task\\koda-b1-weekly4\\dotnet\\src\\Ewallet.Console\\obj\\",
+        "outputPath": "E:\\code\\koda-projects\\1-task\\fase-1\\koda-b1-weekly4\\dotnet\\src\\Ewallet.Console\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\DELL\\AppData\\Roaming\\NuGet\\NuGet.Config",

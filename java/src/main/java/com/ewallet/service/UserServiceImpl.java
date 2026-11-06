@@ -1,5 +1,7 @@
 package com.ewallet.service;
 
+import java.util.List;
+
 import com.ewallet.data.DbContext;
 import com.ewallet.model.User;
 
@@ -20,5 +22,9 @@ public class UserServiceImpl {
 
     public User getUserByUserId(String userId){
         return _context.getUsers().stream().filter(u -> userId.equals(u.getId())).findFirst().orElse(null);
+    }
+
+    public List<User> getAllUsers(){
+        return _context.getUsers();
     }
 }

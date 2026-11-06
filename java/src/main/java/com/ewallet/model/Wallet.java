@@ -1,86 +1,50 @@
 package com.ewallet.model;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 public class Wallet {
-    public UUID Id = UUID.randomUUID();
-    public String AccountNumber;
-    public String PINHash;
-    public String UserId;
-    public double Balance;
+    public String id;
+    public String accountNumber;
+    public String pinHash;
+    public String userId;
+    public long balance;
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     
 
-    public Wallet(String accountNumber, String pINHash, String userId, double balance) {
-        AccountNumber = accountNumber;
-        PINHash = pINHash;
-        Balance = balance;
-        UserId = userId;
+    public Wallet(String id,String accountNumber, String pINHash, String userId, long balance) {
+        this.id = id;
+        this.accountNumber = accountNumber;
+        this.pinHash = pINHash;
+        this.balance = balance;
+        this.userId = userId;
     }
 
 
-    public UUID getId() {
-        return Id;
+    public String getId() {
+        return id;
     }
-
-
-
-    public void setId(UUID id) {
-        Id = id;
-    }
-
-
 
     public String getAccountNumber() {
-        return AccountNumber;
+        return accountNumber;
     }
 
-
-
-    public void setAccountNumber(String accountNumber) {
-        AccountNumber = accountNumber;
+    public String getPinHash() {
+        return pinHash;
     }
 
-
-
-    public String getPINHash() {
-        return PINHash;
+    public void setPinHash(String pINHash) {
+        pinHash = pINHash;
     }
 
-
-
-    public void setPINHash(String pINHash) {
-        PINHash = pINHash;
+    public long getBalance() {
+        return balance;
     }
-
-
-
-    public double getBalance() {
-        return Balance;
-    }
-
-
-
-    public void setBalance(double balance) {
-        Balance = balance;
-    }
-
-
 
     public String getUserId() {
-        return UserId;
+        return userId;
     }
-
-
-
-    public void setUserId(String userId) {
-        UserId = userId;
-    }
-
-
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
@@ -102,6 +66,13 @@ public class Wallet {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public long Debit(long amount){
+        return this.balance+=amount;
+    }
+    public long Credit(long amount){
+        return balance-=amount;
     }
     
 

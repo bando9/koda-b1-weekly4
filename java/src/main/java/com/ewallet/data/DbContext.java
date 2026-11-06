@@ -11,12 +11,12 @@ import com.ewallet.model.Wallet;
 public class DbContext {
     private List<Mutation> mutations = new ArrayList<>();
     private List<Transaction> transactions = new ArrayList<>();
-    private List<Wallet> wallets = new ArrayList<>(List.of(
-            new Wallet( "88990001", "hash_pin_1", "1", 1500000),
-            new Wallet("88990002", "hash_pin_2", "2", 2500000),
-            new Wallet( "88990003", "hash_pin_3", "3", 500000),
-            new Wallet( "88990004", "hash_pin_4", "4", 3000000),
-            new Wallet( "88990005", "hash_pin_5", "5", 100000)
+    private final List<Wallet> wallets = new ArrayList<>(List.of(
+            new Wallet( "W-01","88990001", "hash_pin_1", "1", 1500000),
+            new Wallet("W-02","88990002", "hash_pin_2", "2", 2500000),
+            new Wallet( "W-03","88990003", "hash_pin_3", "3", 500000),
+            new Wallet( "W-04","88990004", "hash_pin_4", "4", 3000000),
+            new Wallet( "W-05","88990005", "hash_pin_5", "5", 100000)
     ));
     private final List<User> users = new ArrayList<>(List.of(
         new User("1","bandomega", "password_hash", "bandomega@gmail.com", "url_link_photo", "Bando Mega", "89530950881"),
