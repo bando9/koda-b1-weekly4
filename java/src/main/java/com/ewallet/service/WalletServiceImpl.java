@@ -41,8 +41,8 @@ public class WalletServiceImpl implements WalletService{
 
     @Override
     public void creaditWallet(String userId, long amount) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'creaditWallet'");
+        Wallet wallet = getWalletByUserId(userId);
+        wallet.Credit(amount);
     }
 
 

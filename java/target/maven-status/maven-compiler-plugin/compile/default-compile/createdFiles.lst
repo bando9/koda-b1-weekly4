@@ -4,7 +4,6 @@ com\ewallet\model\Mutation.class
 com\ewallet\utils\Helper.class
 com\ewallet\service\WalletService.class
 com\ewallet\service\WalletServiceImpl.class
-com\ewallet\service\UserService.class
 com\ewallet\model\Wallet.class
 com\ewallet\model\Transaction.class
 com\ewallet\service\UserServiceImpl.class

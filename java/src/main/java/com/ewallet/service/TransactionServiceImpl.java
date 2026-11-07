@@ -26,7 +26,6 @@ public class TransactionServiceImpl implements TransactionService {
     public void Transfer(String senderId, String receiverId, Scanner input) {
         Helper helper = new Helper();
 
-        // TODO: wallet & user from sender & receiver
         User sender = _userServiceImpl.getUserByUserId(senderId);
         User receiver = _userServiceImpl.getUserByUserId(receiverId);
         Wallet senderWallet = _walletServiceImpl.getWalletByUserId(senderId); 
@@ -34,10 +33,25 @@ public class TransactionServiceImpl implements TransactionService {
 
         System.out.println("Mau Transfer berapa: ");
         long transferAmount = input.nextLong();
+        input.nextLine();
+
+        if(sender == null || receiver == null){
+            System.out.println("Penerima tidak ditemukan\n");
+            return ;
+        }
+
+        if(sender == receiver){
+            System.out.println("Percuma dong, manabisa transfer diri sendiri dari akun yg sama\n");
+        }
+
+        if(transferAmount > senderWallet.balance){
+            System.out.println("Uangmu dikit, gausah transfer segitu\n");
+            return;
+        }
+
 
         System.out.println("Tujuan transfer: ");
         String description = input.nextLine();
-        input.nextLine();
         
         System.out.println("Konfirmasi (Y/N): ");
         String confirmation = input.nextLine();
@@ -84,12 +98,13 @@ public class TransactionServiceImpl implements TransactionService {
         long topUpAmount = input.nextLong();
         input.nextLine();
 
+        if(topUpAmount <= 0){
+            System.out.println("Transaksi gagal. `Masak mau topup minus bang?`");
+            return;
+        }
+
         System.out.println("Apa tujuan Top Up: ");
         String description = input.nextLine();
-
-        if(topUpAmount <= 0){
-            System.out.println("jumlah uang tidak boleh kurang dari 0.");
-        }
 
         Transaction newTransaction = new Transaction();
         _context.getTransactions().add(newTransaction);
@@ -115,8 +130,100 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<Mutation> GetMutationHistory(String walletId, TransactionTypeEnum typeEnum) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'GetMutationHistory'");
+        return _context.getMutations().stream()
+                .filter(m->walletId.equals(m.getWalletId()))
+                .filter(m-> typeEnum == null || m.getTransactionType() == typeEnum)
+                .toList();
+    }
+
+    public long GetTotalIncomeMutation(String walletId){
+        List<Mutation> mutations = GetMutationHistory(walletId, TransactionTypeEnum.Income);
+        long result = 0;
+        for(Mutation m:mutations){
+            result+=m.getAmount();
+        }
+        return result;
+    }
+
+    public long GetTotalExpenseMutation(String walletId){
+        List<Mutation> mutations = GetMutationHistory(walletId, TransactionTypeEnum.Expense);
+        long result = 0;
+        for(Mutation m:mutations){
+            result+=m.getAmount();
+        }
+        return result;
+    }
+
+    public long GetTotalAllMutation(String walletId){
+        List<Mutation> mutations = GetMutationHistory(walletId, null);
+        long result = 0;
+        for(Mutation m:mutations){
+            result+=m.getAmount();
+        }
+        return result;
+    }
+
+    public void GetMutationHistoryFilter(String userLogin, Scanner input){
+        Helper helper =  new Helper();
+        Wallet walletUserLogin = _walletServiceImpl.getWalletByUserId(userLogin);
+        if(GetMutationHistory(walletUserLogin.id, null).size() <=0){
+            System.out.println("\nKamu blm ada transaksi apapun.\n");
+            return;
+        }
+                            System.out.println();
+                            List<String> filterOption = List.of("1. Income", "2. Expense", "3. All");
+                            
+                            for(String f:filterOption){
+                                System.out.println(f);
+                            }
+                            
+                            System.out.println("Mau lihat mutasi berdasarkan apa: ");
+                            int filterMutation = input.nextInt();
+                            
+                            System.out.println("\n\n-------- MUTASI --------");
+
+                            switch (filterMutation) {
+                                case 1->{
+                                    List<Mutation> mutations =GetMutationHistory(walletUserLogin.id, TransactionTypeEnum.Income);
+                                    int j =0;
+                                    for(Mutation m : mutations){
+                                        j++;
+                                        System.out.println(j+". "+m.getDescription()+" - ("+m.getTransactionType()+") = "+helper.FormattedToRupiah(m.getAmount()) +" "+ helper.formatDate(m.getCreatedAt()));
+                                    }
+                                    System.out.println("\nTotal Pemasukan: "+helper.FormattedToRupiah(GetTotalIncomeMutation(walletUserLogin.id)));
+                                    System.out.println();
+                                }
+                                case 2->{
+                                    List<Mutation> mutations = GetMutationHistory(walletUserLogin.id, TransactionTypeEnum.Expense);
+                                    
+                                    int i=0;
+                                    for(Mutation m : mutations){
+                                        i++;
+                                        System.out.println(i+". "+m.getDescription()+" - ("+m.getTransactionType()+") = "+helper.FormattedToRupiah(m.getAmount()) +" "+ helper.formatDate(m.getCreatedAt()));
+                                    }
+                                    System.out.println("\nTotal Pengeluaran: "+helper.FormattedToRupiah(GetTotalExpenseMutation(walletUserLogin.id)));
+                                    System.out.println();
+                                }
+                                case 3->{
+                                    List<Mutation> mutations = GetMutationHistory(walletUserLogin.id, null);
+                                    int k=0;
+                                    for(Mutation m : mutations){
+                                        k++;
+                                        System.out.println(k+". "+m.getDescription()+" - ("+m.getTransactionType()+") = "+helper.FormattedToRupiah(m.getAmount()) +" "+ helper.formatDate(m.getCreatedAt()));
+                                    }
+
+                                    System.out.println("\nTotal Pemasukan: "+helper.FormattedToRupiah(GetTotalIncomeMutation(walletUserLogin.id)));
+
+                                    System.out.println("Total Pengeluaran: "+ helper.FormattedToRupiah(GetTotalExpenseMutation(walletUserLogin.id)));
+
+                                    System.out.println("Total Transaksi: "+helper.FormattedToRupiah(GetTotalAllMutation(walletUserLogin.id)));
+                                    System.out.println();
+                                }
+                                default->{
+                                    System.out.println("ga ada dipilihan. Mau apa ngab?");
+                                }
+                                    
+                            }
     }
 
 

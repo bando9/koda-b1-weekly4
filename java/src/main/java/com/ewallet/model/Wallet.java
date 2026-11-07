@@ -72,7 +72,7 @@ public class Wallet {
         return this.balance+=amount;
     }
     public long Credit(long amount){
-        return balance-=amount;
+        return this.balance-=amount;
     }
     
 

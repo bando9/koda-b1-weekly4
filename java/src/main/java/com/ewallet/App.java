@@ -20,9 +20,14 @@ public class App
             UserServiceImpl userService = new UserServiceImpl(_context);
             WalletServiceImpl walletService = new WalletServiceImpl(_context);
             TransactionServiceImpl transactionServiceImpl = new TransactionServiceImpl(_context);
+
             
             boolean isRunningApp = true;
             while(isRunningApp){               
+                List<Mutation> mutationsAll = _context.getMutations();
+                for(Mutation m:mutationsAll){
+                    System.out.println(m.getAmount()+m.getDescription()+" "+m.getId()+" "+m.getWalletId()+" "+m.getTransactionType());
+                }
                 System.out.println("================= KODA EWALLET ================="); 
                 List<User> users = _context.getUsers();
                 int i = 0;
@@ -88,15 +93,10 @@ public class App
                             }
                             System.out.println("Mau kirim ke siapa(id): ");
                             String receiverId = input.nextLine(); 
-                            transactionServiceImpl.Transfer(userLogin, receiverId, input);
-                            
-                            System.out.println("transfer");
-                         
+                            transactionServiceImpl.Transfer(userLogin, receiverId, input);                         
                         }
                         case 4 -> {
-
-                            System.out.println("mutasi");
-                         
+                            transactionServiceImpl.GetMutationHistoryFilter(userLogin, input);
                         }
                         case 5 -> {
 
