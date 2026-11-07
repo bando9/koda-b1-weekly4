@@ -35,6 +35,15 @@ public class TransactionServiceImpl implements TransactionService {
         long transferAmount = input.nextLong();
         input.nextLine();
 
+        if(transferAmount > senderWallet.balance){
+            System.out.println("Uangmu dikit, gausah transfer segitu\n");
+            return;
+        }
+
+        if(transferAmount <= 0){
+            System.out.println("Gabisa ngirim kurang dari 0 cuy.");
+        }
+
         if(sender == null || receiver == null){
             System.out.println("Penerima tidak ditemukan\n");
             return ;
@@ -42,12 +51,11 @@ public class TransactionServiceImpl implements TransactionService {
 
         if(sender == receiver){
             System.out.println("Percuma dong, manabisa transfer diri sendiri dari akun yg sama\n");
-        }
-
-        if(transferAmount > senderWallet.balance){
-            System.out.println("Uangmu dikit, gausah transfer segitu\n");
             return;
         }
+
+        
+
 
 
         System.out.println("Tujuan transfer: ");
