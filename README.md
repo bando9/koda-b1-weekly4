@@ -13,10 +13,17 @@ Aplikasi Ewallet menggunakan bahasa **Dotnet** (console) versi 10.0 dan **Java**
 
 ## Alur Aplikasi
 
-```mermaid
-
-
-```
+1. Pertama, aplikasi dijalankan.
+2. Lalu pengguna memilih akun yang mau dipakai dari daftar pengguna yang tampil.
+3. Setelah itu muncul menu utama: Lihat Saldo, Top Up, Transfer, dan Riwayat Transaksi.
+4. Pengguna tinggal memilih salah satu menu yang dibutuhkan.
+5. Dari menu itu, pengguna bisa:
+   - Top Up, untuk menambah saldo wallet.
+   - Transfer, untuk mengirim saldo ke pengguna lain.
+   - Riwayat, untuk melihat transaksi yang pernah dilakukan.
+6. Sebelum transaksi diproses, sistem mengecek dulu apakah transaksinya valid.
+7. Kalau berhasil, saldo wallet langsung diperbarui dan transaksinya dicatat ke riwayat.
+8. Selesai itu, pengguna bisa logout untuk kembali ke daftar pengguna, memilih user lain, atau memilih Exit kalau mau keluar dari aplikasi.
 
 ## Struktur Class
 
